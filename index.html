@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Aishwarya — desktop</title>
+  <meta name="description" content="Designer and creative technologist. Motion, microsites, and AI-powered creative tools." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="boot" class="boot" role="dialog" aria-label="Starting desktop">
+    <div class="boot-inner">
+      <div class="boot-flag" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <h1>Aishwarya</h1>
+      <p>starting desktop…</p>
+      <div class="boot-bar" aria-hidden="true"><span></span></div>
+      <button type="button" class="boot-skip" id="boot-skip">skip</button>
+    </div>
+  </div>
+
+  <div id="desktop" class="desktop">
+    <div class="wallpaper" aria-hidden="true"></div>
+
+    <nav class="icons" aria-label="Desktop">
+      <button type="button" class="icon" data-open="about">
+        <span class="glyph about"><svg viewBox="0 0 36 32" aria-hidden="true"><rect x="4" y="2" width="28" height="28" rx="14" fill="#16141e" stroke="#c9c1b4" stroke-width="1.5"/><circle cx="18" cy="13" r="5" fill="#f4efe6"/><path d="M8 28c2-7 20-7 22 0" fill="#f4efe6"/></svg></span>
+        <span>About</span>
+      </button>
+      <button type="button" class="icon" data-open="projects">
+        <span class="glyph os"><svg viewBox="0 0 36 32" aria-hidden="true"><rect x="3" y="5" width="13" height="10" rx="1" fill="#2a1850" stroke="#c9c1b4" stroke-width="1"/><rect x="20" y="5" width="13" height="10" rx="1" fill="#1a3a8a" stroke="#c9c1b4" stroke-width="1"/><rect x="3" y="17" width="13" height="10" rx="1" fill="#163322" stroke="#c9c1b4" stroke-width="1"/><rect x="20" y="17" width="13" height="10" rx="1" fill="#3a1e48" stroke="#c9c1b4" stroke-width="1"/></svg></span>
+        <span>Projects</span>
+      </button>
+      <button type="button" class="icon" data-open="tools">
+        <span class="glyph tools"><svg viewBox="0 0 36 32" aria-hidden="true"><rect x="2" y="4" width="32" height="24" rx="2" fill="#1a1824" stroke="#c9c1b4" stroke-width="1.4"/><path d="M10 22 l8-8 3 3-8 8-4 1z" fill="#f7c948"/><circle cx="24" cy="12" r="5" fill="none" stroke="#7fc6ff" stroke-width="1.6"/><path d="M22 12h4M24 10v4" stroke="#7fc6ff" stroke-width="1.2"/></svg></span>
+        <span>Tools</span>
+      </button>
+      <button type="button" class="icon" data-open="contact">
+        <span class="glyph contact"><svg viewBox="0 0 36 32" aria-hidden="true"><rect x="3" y="6" width="30" height="20" rx="2" fill="#221f2c" stroke="#f7c948" stroke-width="1.4"/><path d="M3 8l15 10 15-10" fill="none" stroke="#f7c948" stroke-width="1.4"/></svg></span>
+        <span>Contact</span>
+      </button>
+      <a class="icon" href="https://aish-os.vercel.app/hello" target="_blank" rel="noopener">
+        <span class="glyph os"><svg viewBox="0 0 36 32" aria-hidden="true"><rect x="2" y="4" width="32" height="24" rx="2" fill="#1a3a8a" stroke="#7fc6ff" stroke-width="1.4"/><rect x="2" y="4" width="32" height="7" fill="#0d2a6a"/><circle cx="7" cy="7.5" r="1.2" fill="#ff6b6b"/><circle cx="11" cy="7.5" r="1.2" fill="#f7c948"/><circle cx="15" cy="7.5" r="1.2" fill="#81bc06"/><rect x="8" y="15" width="20" height="9" fill="#e9e4d4"/></svg></span>
+        <span>AISH.OS</span>
+      </a>
+      <a class="icon" href="https://aishwaryadeyy.com" target="_blank" rel="noopener">
+        <span class="glyph"><svg viewBox="0 0 36 32" aria-hidden="true"><rect x="2" y="4" width="32" height="24" rx="2" fill="#2a2733" stroke="#c9c1b4" stroke-width="1.4"/><rect x="2" y="4" width="32" height="7" fill="#3d6eff"/><circle cx="7" cy="7.5" r="1.2" fill="#ff6b6b"/><circle cx="11" cy="7.5" r="1.2" fill="#f7c948"/><circle cx="15" cy="7.5" r="1.2" fill="#81bc06"/><path d="M6 24 L14 16 L20 21 L34 12" fill="none" stroke="#ff6fb5" stroke-width="1.5"/><circle cx="24" cy="15" r="2" fill="#f7c948"/></svg></span>
+        <span>Portfolio</span>
+      </a>
+      <a class="icon" href="https://content-journal.vercel.app" target="_blank" rel="noopener">
+        <span class="glyph journal"><svg viewBox="0 0 36 32" aria-hidden="true"><rect x="10" y="3" width="18" height="26" rx="1.5" fill="#e9e4d4" stroke="#c9c1b4" stroke-width="1.4"/><rect x="7" y="3" width="5" height="26" fill="#8B5CF6" stroke="#1b1a22" stroke-width="1"/><path d="M16 10h9M16 15h9M16 20h6" stroke="#1b1a22" stroke-width="1.2"/></svg></span>
+        <span>Journal</span>
+      </a>
+    </nav>
+
+    <section class="window" id="win-about" data-window="about" style="left: 200px; top: 56px;" aria-labelledby="about-title">
+      <div class="title-bar">
+        <i class="mini" aria-hidden="true"></i>
+        <span id="about-title">About</span>
+        <div class="title-btns">
+          <button type="button" data-action="min" aria-label="Minimize">–</button>
+          <button type="button" data-action="max" aria-label="Maximize">□</button>
+          <button type="button" class="close" data-action="close" aria-label="Close">×</button>
+        </div>
+      </div>
+      <div class="body">
+        <div class="tag">@aishdesign</div>
+        <h2>Aishwarya</h2>
+        <p class="lead">designer + creative technologist</p>
+        <div class="rule" aria-hidden="true"></div>
+        <p>I make motion, illustration, and VFX for tech brands, and I vibe-code interactive microsites and AI-powered creative tools.</p>
+        <p>Independent creator, and a creator partner at WalletConnect. Previously design at KoinX, motion at The Sandbox, and design in the Hyperliquid ecosystem. UGC creator with 3M+ views on reels.</p>
+      </div>
+    </section>
+
+    <section class="window" id="win-projects" data-window="projects" style="left: 280px; top: 90px;" aria-labelledby="projects-title">
+      <div class="title-bar">
+        <i class="mini" aria-hidden="true"></i>
+        <span id="projects-title">Projects</span>
+        <div class="title-btns">
+          <button type="button" data-action="min" aria-label="Minimize">–</button>
+          <button type="button" data-action="max" aria-label="Maximize">□</button>
+          <button type="button" class="close" data-action="close" aria-label="Close">×</button>
+        </div>
+      </div>
+      <div class="body">
+        <h2>Projects</h2>
+        <div class="rule" aria-hidden="true"></div>
+        <ul class="project-list">
+          <li>
+            <a href="https://aish-os.vercel.app/hello" target="_blank" rel="noopener">
+              <strong>AISH.OS</strong>
+              <span>An interactive XP-style microsite.</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://aishwaryadeyy.com" target="_blank" rel="noopener">
+              <strong>Portfolio</strong>
+              <span>Selected creator work for brands including WalletConnect, The Sandbox, Replit, and ElevenLabs.</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://content-journal.vercel.app" target="_blank" rel="noopener">
+              <strong>Content Journal</strong>
+              <span>Journal your day, then turn what you actually did into content ideas, an idea bank, a calendar, and trending prompts.</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="window" id="win-tools" data-window="tools" style="left: 240px; top: 48px;" aria-labelledby="tools-title">
+      <div class="title-bar">
+        <i class="mini" aria-hidden="true"></i>
+        <span id="tools-title">Installed Programs</span>
+        <div class="title-btns">
+          <button type="button" data-action="min" aria-label="Minimize">–</button>
+          <button type="button" data-action="max" aria-label="Maximize">□</button>
+          <button type="button" class="close" data-action="close" aria-label="Close">×</button>
+        </div>
+      </div>
+      <div class="body">
+        <h2>Tools</h2>
+        <div class="rule" aria-hidden="true"></div>
+        <div class="tool-groups">
+          <div class="tool-group" data-tone="pink">
+            <h3>Motion &amp; video</h3>
+            <ul><li>After Effects</li><li>Premiere Pro</li></ul>
+          </div>
+          <div class="tool-group" data-tone="blue">
+            <h3>3D</h3>
+            <ul>
+              <li>Blender</li><li>Maya</li><li>ZBrush</li>
+              <li>Marmoset Toolbag</li><li>Substance 3D Painter</li>
+            </ul>
+          </div>
+          <div class="tool-group" data-tone="gold">
+            <h3>Design</h3>
+            <ul><li>Illustrator</li><li>Photoshop</li></ul>
+          </div>
+          <div class="tool-group" data-tone="green">
+            <h3>AI &amp; vibe-coding</h3>
+            <ul>
+              <li>Claude Code</li><li>Cursor</li><li>Grok Bot</li>
+              <li>Higgsfield</li><li>ElevenLabs</li><li>Next.js</li><li>Vercel</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="window" id="win-contact" data-window="contact" style="left: 320px; top: 120px; width: 420px;" aria-labelledby="contact-title">
+      <div class="title-bar">
+        <i class="mini" aria-hidden="true"></i>
+        <span id="contact-title">Contact</span>
+        <div class="title-btns">
+          <button type="button" data-action="min" aria-label="Minimize">–</button>
+          <button type="button" data-action="max" aria-label="Maximize">□</button>
+          <button type="button" class="close" data-action="close" aria-label="Close">×</button>
+        </div>
+      </div>
+      <div class="body">
+        <h2>Find me</h2>
+        <div class="rule" aria-hidden="true"></div>
+        <ul class="link-list">
+          <li><a href="https://aishwaryadeyy.com" target="_blank" rel="noopener"><strong>Portfolio</strong><span>aishwaryadeyy.com</span></a></li>
+          <li><a href="https://x.com/aishdesign" target="_blank" rel="noopener"><strong>X</strong><span>@aishdesign</span></a></li>
+          <li><a href="https://www.linkedin.com/in/aishwaryadey24" target="_blank" rel="noopener"><strong>LinkedIn</strong><span>aishwaryadey24</span></a></li>
+          <li><a href="https://instagram.com/techtalksbyash" target="_blank" rel="noopener"><strong>Instagram</strong><span>@techtalksbyash</span></a></li>
+        </ul>
+      </div>
+    </section>
+
+    <div id="start-menu" class="start-menu" role="menu" aria-label="Start">
+      <div class="start-head">Aishwarya</div>
+      <ul>
+        <li><button type="button" data-open="about">About</button></li>
+        <li><button type="button" data-open="projects">Projects</button></li>
+        <li><button type="button" data-open="tools">Installed Programs</button></li>
+        <li><button type="button" data-open="contact">Contact</button></li>
+        <li class="sep"></li>
+        <li><a href="https://aish-os.vercel.app/hello" target="_blank" rel="noopener">AISH.OS</a></li>
+        <li><a href="https://aishwaryadeyy.com" target="_blank" rel="noopener">Portfolio</a></li>
+        <li><a href="https://content-journal.vercel.app" target="_blank" rel="noopener">Content Journal</a></li>
+        <li class="sep"></li>
+        <li><button type="button" id="restart">Restart</button></li>
+      </ul>
+    </div>
+
+    <footer class="taskbar">
+      <button type="button" class="start-btn" id="start-btn" aria-haspopup="true" aria-expanded="false" aria-controls="start-menu">
+        <span class="flag" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        start
+      </button>
+      <div class="tasks" id="tasks"></div>
+      <div class="tray">
+        <span class="led" aria-hidden="true"></span>
+        <time id="clock">--:--</time>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
