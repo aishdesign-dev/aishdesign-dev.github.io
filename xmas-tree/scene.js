@@ -5,33 +5,34 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
-const TREE_H = 3.05;
-const TREE_R = 1.16;
-const HERO_ANGLE = 0.52;
+const TREE_H = 3.9;
+const TREE_R = 1.32;
+const HERO_ANGLE = 0.16;
 const SPIN = 0.11;
-const MOON = { x: 0.42, y: 6.25, z: -12.2, r: 1.62 };
+const DEER_S = 1.58;
+const MOON = { x: 2.15, y: 7.85, z: -11.2, r: 1.92 };
 
 const ORNAMENTS = [
-  { h: 0.24, a: 0.45, s: 0.13, color: 0xff4f8b, gem: "oct", thick: 140 },
-  { h: 0.38, a: 1.15, s: 0.1, color: 0xb79cff, gem: "ico", thick: 220 },
-  { h: 0.5, a: 1.85, s: 0.14, color: 0x2f6bff, gem: "oct", thick: 180 },
-  { h: 0.62, a: 2.45, s: 0.09, color: 0xffc857, gem: "ico", thick: 260 },
-  { h: 0.3, a: 2.95, s: 0.11, color: 0x2ee6d6, gem: "oct", thick: 200 },
-  { h: 0.7, a: 0.15, s: 0.1, color: 0xff4f8b, gem: "ico", thick: 300 },
-  { h: 0.44, a: 3.35, s: 0.12, color: 0xb79cff, gem: "oct", thick: 160 },
-  { h: 0.56, a: 0.9, s: 0.08, color: 0x2f6bff, gem: "ico", thick: 340 },
-  { h: 0.2, a: 4.3, s: 0.11, color: 0xffc857, gem: "oct", thick: 210 },
-  { h: 0.48, a: 5.1, s: 0.13, color: 0xff4f8b, gem: "ico", thick: 250 },
-  { h: 0.66, a: 4.7, s: 0.09, color: 0x2ee6d6, gem: "oct", thick: 190 },
-  { h: 0.34, a: 5.7, s: 0.12, color: 0xb79cff, gem: "ico", thick: 280 },
+  { h: 0.16, a: 0.35, s: 0.24 },
+  { h: 0.3, a: 1.25, s: 0.2 },
+  { h: 0.44, a: 2.15, s: 0.26 },
+  { h: 0.56, a: 2.85, s: 0.18 },
+  { h: 0.68, a: 0.85, s: 0.22 },
+  { h: 0.24, a: 3.55, s: 0.19 },
+  { h: 0.38, a: 4.35, s: 0.23 },
+  { h: 0.62, a: 5.05, s: 0.17 },
+  { h: 0.5, a: 1.7, s: 0.21 },
+  { h: 0.34, a: 5.7, s: 0.22 },
+  { h: 0.76, a: 2.45, s: 0.16 },
+  { h: 0.2, a: 6.05, s: 0.2 },
 ];
 
 const GIFTS = [
-  { x: -1.12, z: 1.12, w: 0.4, h: 0.32, d: 0.34, rot: 0.4, color: 0x2f6bff, ribbon: 0xffc857 },
-  { x: -0.42, z: 1.38, w: 0.28, h: 0.22, d: 0.28, rot: -0.35, color: 0xff4f8b, ribbon: 0xffc857 },
-  { x: 0.28, z: 1.32, w: 0.44, h: 0.3, d: 0.36, rot: 0.12, color: 0xb79cff, ribbon: 0x2ee6d6 },
-  { x: 0.92, z: 1.02, w: 0.3, h: 0.36, d: 0.3, rot: -0.5, color: 0xffc857, ribbon: 0xff4f8b },
-  { x: -0.88, z: 1.58, w: 0.24, h: 0.2, d: 0.24, rot: 0.7, color: 0x2ee6d6, ribbon: 0xffc857 },
+  { x: -1.28, z: 1.18, w: 0.52, h: 0.42, d: 0.46, rot: 0.28, tint: 0x6d4bff, ribbon: 0xffc857 },
+  { x: -0.48, z: 1.48, w: 0.4, h: 0.32, d: 0.36, rot: -0.22, tint: 0x2f6bff, ribbon: 0x2ee6d6 },
+  { x: 0.22, z: 1.32, w: 0.5, h: 0.36, d: 0.42, rot: 0.18, tint: 0xb79cff, ribbon: 0xffc857 },
+  { x: -1.02, z: 1.68, w: 0.34, h: 0.3, d: 0.32, rot: 0.55, tint: 0x7aa2ff, ribbon: 0xff4f8b },
+  { x: 0.42, z: 1.62, w: 0.38, h: 0.4, d: 0.34, rot: -0.4, tint: 0x9b6bff, ribbon: 0x2ee6d6 },
 ];
 
 function mulberry32(seed) {
@@ -135,20 +136,41 @@ function skyTexture() {
   });
 }
 
-function crystalMaterial(hex, thickness) {
-  const color = new THREE.Color(hex);
-  return new THREE.MeshPhysicalMaterial({
-    color,
-    metalness: 0.12,
-    roughness: 0.08,
-    iridescence: 1,
-    iridescenceIOR: 1.45,
-    iridescenceThicknessRange: [thickness, thickness + 320],
-    emissive: color,
-    emissiveIntensity: 0.42,
-    clearcoat: 1,
-    clearcoatRoughness: 0.05,
-    envMapIntensity: 1.35,
+const iridescentTime = { value: 0 };
+
+function iridescentMaterial(tint) {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uTime: iridescentTime,
+      uTint: { value: new THREE.Color(tint) },
+    },
+    extensions: { derivatives: true },
+    vertexShader: `
+      varying vec3 vNormal;
+      void main() {
+        vNormal = normalize(mat3(modelMatrix) * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      #include <common>
+      varying vec3 vNormal;
+      uniform float uTime;
+      uniform vec3 uTint;
+      void main() {
+        vec3 N = normalize(vNormal);
+        float k = fract(abs(N.x) * 1.7 + abs(N.y) * 2.3 + abs(N.z) * 3.1);
+        vec3 pink = vec3(1.0, 0.25, 0.55);
+        vec3 lilac = vec3(0.72, 0.45, 1.0);
+        vec3 blue = vec3(0.2, 0.4, 1.0);
+        vec3 gold = vec3(1.0, 0.72, 0.25);
+        vec3 col = mix(pink, blue, step(0.33, k));
+        col = mix(col, lilac, step(0.66, k));
+        col = mix(col, gold, step(0.84, k) * 0.65);
+        col = mix(col, uTint, 0.38);
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `,
   });
 }
 
@@ -181,7 +203,7 @@ function starGeometry() {
   const shape = new THREE.Shape();
   const spikes = 5;
   for (let i = 0; i < spikes * 2; i++) {
-    const r = i % 2 === 0 ? 0.36 : 0.15;
+    const r = i % 2 === 0 ? 0.58 : 0.24;
     const a = (i / (spikes * 2)) * Math.PI * 2 - Math.PI / 2;
     const x = Math.cos(a) * r;
     const y = Math.sin(a) * r;
@@ -190,14 +212,16 @@ function starGeometry() {
   }
   shape.closePath();
   const geo = new THREE.ExtrudeGeometry(shape, {
-    depth: 0.1,
+    depth: 0.16,
     bevelEnabled: true,
-    bevelThickness: 0.028,
-    bevelSize: 0.02,
+    bevelThickness: 0.04,
+    bevelSize: 0.028,
     bevelSegments: 1,
   });
   geo.center();
-  return geo;
+  const flat = geo.toNonIndexed();
+  flat.computeVertexNormals();
+  return flat;
 }
 
 function ridge(heights, color, z) {
@@ -270,14 +294,18 @@ function makeSleigh(mat) {
 function sampleDeer(rng) {
   const pts = [];
   const cols = [];
+  const goldPts = [];
   const red = new THREE.Color("#e5384f");
+  const pink = new THREE.Color("#ff4f8b");
   const gold = new THREE.Color("#ffc857");
-  const hot = new THREE.Color("#ffe7a8");
+  const hot = new THREE.Color("#fff3c4");
   function push(x, y, z, chance) {
-    pts.push(x, y, z);
     const roll = rng();
-    const c = roll < chance * 0.35 ? hot : roll < chance ? gold : red;
+    const isGold = roll < chance;
+    const c = isGold ? (roll < chance * 0.35 ? hot : gold) : roll < 0.62 ? pink : red;
+    pts.push(x, y, z);
     cols.push(c.r, c.g, c.b);
+    if (isGold) goldPts.push(x, y, z);
   }
   function ellipsoid(n, cx, cy, cz, rx, ry, rz, chance) {
     let i = 0;
@@ -305,30 +333,31 @@ function sampleDeer(rng) {
       );
     }
   }
-  ellipsoid(460, 0.02, 0.22, 0, 0.52, 0.2, 0.15, 0.32);
-  ellipsoid(100, 0.4, 0.28, 0, 0.18, 0.15, 0.12, 0.4);
-  ellipsoid(90, -0.34, 0.18, 0, 0.2, 0.16, 0.12, 0.34);
-  capsule(80, 0.42, 0.32, 0, 0.72, 0.64, 0, 0.085, 0.45);
-  ellipsoid(80, 0.82, 0.72, 0, 0.16, 0.11, 0.09, 0.5);
-  ellipsoid(30, 0.98, 0.66, 0, 0.1, 0.055, 0.05, 0.8);
-  ellipsoid(16, 0.72, 0.84, 0.02, 0.045, 0.09, 0.03, 0.25);
-  ellipsoid(24, -0.58, 0.34, 0, 0.08, 0.1, 0.05, 0.9);
-  capsule(40, 0.32, 0.1, 0.04, 0.55, -0.15, 0.05, 0.042, 0.4);
-  capsule(30, 0.55, -0.15, 0.05, 0.78, -0.42, 0.03, 0.032, 0.55);
-  capsule(34, 0.16, 0.08, -0.03, 0.0, -0.24, -0.02, 0.038, 0.35);
-  capsule(26, 0.0, -0.24, -0.02, -0.16, -0.48, 0, 0.028, 0.5);
-  capsule(36, -0.26, 0.08, 0.03, -0.58, -0.1, 0.04, 0.04, 0.4);
-  capsule(26, -0.58, -0.1, 0.04, -0.82, 0.1, 0.02, 0.028, 0.6);
-  capsule(30, -0.16, 0.05, -0.04, -0.42, -0.28, -0.03, 0.034, 0.35);
-  capsule(24, 0.76, 0.82, 0, 0.62, 1.16, 0.02, 0.022, 0.95);
-  capsule(14, 0.68, 1.0, 0, 0.5, 1.1, 0, 0.016, 0.98);
-  capsule(14, 0.7, 1.06, 0, 0.86, 1.2, 0.02, 0.016, 0.98);
-  capsule(20, 0.8, 0.84, 0, 0.96, 1.14, -0.02, 0.02, 0.95);
-  capsule(12, 0.9, 1.0, 0, 1.04, 1.08, 0, 0.014, 0.98);
+  ellipsoid(820, 0.0, 0.24, 0, 0.56, 0.22, 0.12, 0.42);
+  ellipsoid(180, 0.42, 0.3, 0, 0.2, 0.16, 0.1, 0.5);
+  ellipsoid(160, -0.36, 0.2, 0, 0.22, 0.17, 0.1, 0.4);
+  capsule(150, 0.4, 0.34, 0, 0.74, 0.68, 0, 0.09, 0.55);
+  ellipsoid(150, 0.84, 0.76, 0, 0.18, 0.12, 0.08, 0.6);
+  ellipsoid(55, 1.02, 0.68, 0, 0.12, 0.06, 0.045, 0.85);
+  ellipsoid(30, 0.74, 0.88, 0.02, 0.05, 0.1, 0.025, 0.35);
+  ellipsoid(40, -0.6, 0.36, 0, 0.09, 0.11, 0.04, 0.92);
+  capsule(70, 0.34, 0.12, 0.03, 0.62, -0.12, 0.04, 0.05, 0.5);
+  capsule(55, 0.62, -0.12, 0.04, 0.9, -0.4, 0.02, 0.038, 0.65);
+  capsule(60, 0.16, 0.1, -0.02, -0.02, -0.22, -0.01, 0.045, 0.45);
+  capsule(48, -0.02, -0.22, -0.01, -0.22, -0.5, 0, 0.034, 0.6);
+  capsule(64, -0.28, 0.1, 0.02, -0.66, -0.08, 0.03, 0.048, 0.5);
+  capsule(48, -0.66, -0.08, 0.03, -0.95, 0.16, 0.01, 0.032, 0.7);
+  capsule(52, -0.16, 0.06, -0.03, -0.48, -0.32, -0.02, 0.04, 0.45);
+  capsule(40, 0.78, 0.86, 0, 0.6, 1.22, 0.01, 0.026, 0.98);
+  capsule(24, 0.66, 1.02, 0, 0.46, 1.16, 0, 0.02, 1);
+  capsule(24, 0.7, 1.08, 0, 0.9, 1.26, 0.01, 0.02, 1);
+  capsule(32, 0.82, 0.88, 0, 1.02, 1.2, -0.01, 0.024, 0.98);
+  capsule(18, 0.94, 1.04, 0, 1.12, 1.12, 0, 0.016, 1);
   return {
     count: pts.length / 3,
     position: new Float32Array(pts),
     color: new Float32Array(cols),
+    gold: new Float32Array(goldPts),
   };
 }
 
@@ -451,11 +480,14 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     }),
   );
   halo.position.copy(moon.position);
-  halo.scale.set(7.2, 7.2, 1);
+  halo.scale.set(8.4, 8.4, 1);
+  halo.renderOrder = 1;
   scene.add(halo);
 
-  scene.add(ridge([0, 0.35, 1.05, 0.45, 1.45, 0.55, 0.25, 1.2, 0.5, 0.95, 0.2, 0], 0x121a3c, -7.6));
-  scene.add(ridge([0, 0.15, 0.7, 1.55, 0.45, 0.2, 0.35, 1.25, 1.85, 0.55, 0.15, 0], 0x060912, -5.7));
+  scene.add(ridge([0, 0.4, 2.1, 0.55, 2.7, 0.35, 1.8, 0.6, 2.35, 0.3, 1.4, 0], 0x1c2a55, -9.4));
+  scene.add(ridge([0, 0.25, 1.5, 0.4, 2.2, 0.5, 0.9, 1.7, 0.35, 1.9, 0.2, 0], 0x121c40, -8.1));
+  scene.add(ridge([0, 0.35, 1.05, 0.45, 1.45, 0.55, 0.25, 1.2, 0.5, 0.95, 0.2, 0], 0x121a3c, -6.7));
+  scene.add(ridge([0, 0.15, 0.7, 1.55, 0.45, 0.2, 0.35, 1.25, 1.85, 0.55, 0.15, 0], 0x060912, -5.5));
 
   const pineSpots = [
     [-6.4, 1.15, 0.46, -5.1],
@@ -486,6 +518,7 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
   scene.add(ground);
 
   const platform = new THREE.Group();
+  platform.position.x = -0.38;
   scene.add(platform);
 
   const plinth = new THREE.Mesh(
@@ -540,24 +573,24 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
 
   const soft = discTexture([[0, "rgba(255,255,255,1)"], [0.35, "rgba(255,255,255,0.75)"], [1, "rgba(255,255,255,0)"]]);
 
-  function makeGlitter(count, shellBias, size, hotChance) {
+  function makeGlitter(count, size, hotChance, shell) {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     const seeds = new Float32Array(count);
     const heights = new Float32Array(count);
     for (let i = 0; i < count; i++) {
-      const h = Math.pow(rng(), shellBias);
-      const y = 0.05 + h * TREE_H;
+      const h = Math.pow(rng(), shell ? 0.9 : 0.62);
+      const y = 0.04 + h * TREE_H;
       const maxR = TREE_R * (1 - h);
-      const rad = maxR * (shellBias > 1 ? 0.78 + rng() * 0.22 : Math.sqrt(rng()));
+      const rad = maxR * (shell ? 0.8 + rng() * 0.2 : Math.pow(rng(), 0.42));
       const a = rng() * Math.PI * 2;
       positions[i * 3] = Math.cos(a) * rad;
       positions[i * 3 + 1] = y;
       positions[i * 3 + 2] = Math.sin(a) * rad;
       heights[i] = h;
       seeds[i] = rng();
-      const color = new THREE.Color(rng() < hotChance ? "#fff6d2" : "#ffc857");
-      const shade = 0.72 + rng() * 0.28;
+      const color = new THREE.Color(rng() < hotChance ? "#fff8dc" : "#ffc857");
+      const shade = 0.92 + rng() * 0.45;
       colors[i * 3] = color.r * shade;
       colors[i * 3 + 1] = color.g * shade;
       colors[i * 3 + 2] = color.b * shade;
@@ -587,12 +620,13 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     return points;
   }
 
-  const dust = makeGlitter(4600, 0.85, 0.068, 0.12);
-  const spark = makeGlitter(1100, 1.15, 0.11, 0.62);
-  platform.add(dust, spark);
+  const dust = makeGlitter(5600, 0.062, 0.18, false);
+  const shell = makeGlitter(4200, 0.09, 0.4, true);
+  const spark = makeGlitter(980, 0.16, 0.92, true);
+  platform.add(dust, shell, spark);
 
   const ribbon = new THREE.Mesh(
-    helixStrip(5.6, 0.12, TREE_H * 0.97, 0.052, 320),
+    helixStrip(6.4, 0.1, TREE_H * 0.98, 0.06, 360),
     new THREE.MeshBasicMaterial({
       color: 0x2ee6d6,
       transparent: true,
@@ -619,15 +653,14 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
   ribbonCore.renderOrder = 2;
   platform.add(ribbon, ribbonCore);
 
-  const gemGeo = {
-    oct: new THREE.OctahedronGeometry(1, 0),
-    ico: new THREE.IcosahedronGeometry(0.86, 0),
-  };
-  gemGeo.oct.scale(1, 1.45, 1);
+  const gemGeo = new THREE.OctahedronGeometry(1, 0).toNonIndexed();
+  gemGeo.scale(1, 1.55, 1);
+  gemGeo.computeVertexNormals();
+  const crystal = iridescentMaterial(0xfff6ee);
   const ornaments = ORNAMENTS.map((spec) => {
-    const mesh = new THREE.Mesh(gemGeo[spec.gem], crystalMaterial(spec.color, spec.thick));
+    const mesh = new THREE.Mesh(gemGeo, crystal);
     const y = 0.08 + spec.h * TREE_H;
-    const rad = TREE_R * (1 - spec.h) * 0.94 + 0.03;
+    const rad = TREE_R * (1 - spec.h) * 1.05 + 0.04;
     mesh.position.set(Math.cos(spec.a) * rad, y, Math.sin(spec.a) * rad);
     mesh.userData.base = mesh.position.clone();
     mesh.userData.baseScale = spec.s;
@@ -639,9 +672,8 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     return mesh;
   });
 
-  const star = new THREE.Mesh(starGeometry(), crystalMaterial(0xffc857, 280));
-  star.material.emissiveIntensity = 0.8;
-  star.position.set(0, TREE_H + 0.28, 0);
+  const star = new THREE.Mesh(starGeometry(), iridescentMaterial(0xffc857));
+  star.position.set(0, TREE_H + 0.42, 0);
   star.scale.setScalar(0.001);
   star.visible = false;
   platform.add(star);
@@ -658,13 +690,26 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
   starFlash.position.copy(star.position);
   starFlash.scale.set(0.2, 0.2, 1);
   platform.add(starFlash);
+  const starGlow = new THREE.Sprite(
+    new THREE.SpriteMaterial({
+      map: discTexture([[0, "rgba(255,236,190,0.95)"], [0.25, "rgba(255,200,87,0.45)"], [0.55, "rgba(183,156,255,0.16)"], [1, "rgba(255,200,87,0)"]]),
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      toneMapped: false,
+      opacity: 0,
+    }),
+  );
+  starGlow.position.copy(star.position);
+  starGlow.scale.set(2.8, 2.8, 1);
+  platform.add(starGlow);
   const starLight = new THREE.PointLight(0xffe3a1, 0, 6, 2);
   starLight.position.copy(star.position);
   platform.add(starLight);
 
   const gifts = GIFTS.map((spec) => {
     const group = new THREE.Group();
-    const box = new THREE.Mesh(new THREE.BoxGeometry(spec.w, spec.h, spec.d), crystalMaterial(spec.color, 200));
+    const box = new THREE.Mesh(new THREE.BoxGeometry(spec.w, spec.h, spec.d, 2, 2, 2), iridescentMaterial(spec.tint));
     const ribbonMat = new THREE.MeshBasicMaterial({ color: spec.ribbon, toneMapped: false });
     const bandA = new THREE.Mesh(new THREE.BoxGeometry(spec.w * 1.04, spec.h * 1.02, spec.d * 0.16), ribbonMat);
     const bandB = new THREE.Mesh(new THREE.BoxGeometry(spec.w * 0.16, spec.h * 1.02, spec.d * 1.04), ribbonMat);
@@ -682,33 +727,54 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
   });
 
   const deerData = sampleDeer(rng);
-  const deerFrom = new Float32Array(deerData.position.length);
-  for (let i = 0; i < deerData.count; i++) {
-    const ang = rng() * Math.PI * 2;
-    const rad = 0.35 + rng() * 1.25;
-    deerFrom[i * 3] = Math.cos(ang) * rad;
-    deerFrom[i * 3 + 1] = 0.3 + (rng() - 0.4) * rad;
-    deerFrom[i * 3 + 2] = Math.sin(ang) * rad * 0.55;
+  function scatterFrom(target, spread) {
+    const from = new Float32Array(target.length);
+    for (let i = 0; i < target.length / 3; i++) {
+      const ang = rng() * Math.PI * 2;
+      const rad = 0.2 + rng() * spread;
+      from[i * 3] = Math.cos(ang) * rad;
+      from[i * 3 + 1] = 0.35 + (rng() - 0.35) * rad;
+      from[i * 3 + 2] = Math.sin(ang) * rad * 0.45;
+    }
+    return from;
   }
+  const deerFrom = scatterFrom(deerData.position, 1.15);
   const deerGeo = new THREE.BufferGeometry();
   deerGeo.setAttribute("position", new THREE.BufferAttribute(deerFrom.slice(), 3));
   deerGeo.setAttribute("color", new THREE.BufferAttribute(deerData.color, 3));
   const deer = new THREE.Points(
     deerGeo,
     new THREE.PointsMaterial({
-      size: 0.05,
+      size: 0.11,
       map: soft,
       vertexColors: true,
       transparent: true,
-      opacity: 0.96,
+      opacity: 1,
       depthWrite: false,
     }),
   );
   deer.frustumCulled = false;
+  const goldFrom = scatterFrom(deerData.gold, 1.3);
+  const goldGeo = new THREE.BufferGeometry();
+  goldGeo.setAttribute("position", new THREE.BufferAttribute(goldFrom.slice(), 3));
+  const deerGold = new THREE.Points(
+    goldGeo,
+    new THREE.PointsMaterial({
+      color: 0xffc857,
+      size: 0.13,
+      map: soft,
+      transparent: true,
+      opacity: 0.95,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      toneMapped: false,
+    }),
+  );
+  deerGold.frustumCulled = false;
   const deerPivot = new THREE.Group();
-  deerPivot.add(deer);
-  deerPivot.position.set(1.22, 0.5, 1.15);
-  deerPivot.scale.setScalar(1.22);
+  deerPivot.add(deer, deerGold);
+  deerPivot.position.set(1.08, 0.42, 1.28);
+  deerPivot.scale.setScalar(DEER_S);
   deerPivot.visible = false;
   platform.add(deerPivot);
 
@@ -717,7 +783,7 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     const speeds = new Float32Array(count);
     for (let i = 0; i < count; i++) {
       home[i * 3] = (rng() - 0.5) * spread;
-      home[i * 3 + 1] = rng() * 8.2;
+      home[i * 3 + 1] = rng() * 10.5;
       home[i * 3 + 2] = (rng() - 0.5) * 5.2;
       speeds[i] = 0.28 + rng() * (size > 0.06 ? 0.35 : 0.85);
     }
@@ -747,20 +813,20 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
 
   const rings = [];
   const ringSpecs = [
-    { r: 1.42, color: 0x2ee6d6, tilt: [1.15, 0.15], speed: 0.7 },
-    { r: 1.68, color: 0xffc857, tilt: [0.75, 0.9], speed: -0.5 },
-    { r: 1.95, color: 0xb79cff, tilt: [1.45, 0.45], speed: 0.85 },
+    { r: 1.72, color: 0x2ee6d6, tilt: [1.2, 0.2], speed: 0.55 },
+    { r: 2.05, color: 0xffc857, tilt: [0.7, 0.95], speed: -0.42 },
+    { r: 2.38, color: 0xb79cff, tilt: [1.5, 0.4], speed: 0.68 },
   ];
   for (const spec of ringSpecs) {
     const tilt = new THREE.Group();
     tilt.rotation.set(spec.tilt[0], spec.tilt[1], 0);
-    tilt.position.y = 1.55;
+    tilt.position.y = TREE_H * 0.5;
     const mesh = new THREE.Mesh(
-      new THREE.TorusGeometry(spec.r, 0.014, 12, 96),
+      new THREE.TorusGeometry(spec.r, 0.0065, 10, 120),
       new THREE.MeshBasicMaterial({
         color: spec.color,
         transparent: true,
-        opacity: 0.9,
+        opacity: 0.72,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
         toneMapped: false,
@@ -773,17 +839,23 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     rings.push(tilt);
   }
 
-  const silhouette = new THREE.MeshBasicMaterial({ color: 0x14080e, side: THREE.DoubleSide });
+  const silhouette = new THREE.MeshBasicMaterial({
+    color: 0x14080e,
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 1,
+    depthTest: true,
+  });
   const team = new THREE.Group();
   for (let i = 0; i < 4; i++) {
     const deerFlat = makeFlatDeer(silhouette);
-    deerFlat.scale.setScalar(0.56);
-    deerFlat.position.set(-0.72 + i * 0.4, Math.sin(i) * 0.015, 0);
+    deerFlat.scale.setScalar(0.78);
+    deerFlat.position.set(-1.05 + i * 0.52, Math.sin(i) * 0.02, 0);
     team.add(deerFlat);
   }
   const sleigh = makeSleigh(silhouette);
-  sleigh.scale.setScalar(0.82);
-  sleigh.position.set(0.92, -0.02, 0);
+  sleigh.scale.setScalar(1.05);
+  sleigh.position.set(1.15, -0.02, 0);
   team.add(sleigh);
   const trailCount = 42;
   const trailPos = new Float32Array(trailCount * 3);
@@ -806,23 +878,31 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     }),
   );
   team.add(trail);
-  team.position.set(-3.4, MOON.y - 0.05, MOON.z + 2.35);
+  team.scale.setScalar(2.15);
+  team.position.set(MOON.x - 5.2, MOON.y + 0.2, MOON.z + 1.15);
+  team.renderOrder = 8;
   team.visible = false;
   scene.add(team);
 
-  const glitchColors = [0xff2bd6, 0x00f0ff, 0xffc857];
+  const glitchColors = [0x00f0ff, 0xff2bd6, 0x00f0ff, 0xff2bd6];
   const glitches = [];
   const glitchSpots = [
-    [-3.1, 4.9, -2.2],
-    [2.7, 5.5, -2.4],
-    [-2.15, 3.55, -1.2],
-    [2.35, 3.7, -0.8],
-    [0.85, 7.2, -4.2],
-    [-3.8, 6.4, -4.4],
-    [3.3, 4.6, -3.4],
-    [-0.4, 6.8, -3.0],
-    [1.7, 4.15, -1.6],
-    [-1.5, 5.8, -2.8],
+    [-3.4, 5.2, -1.6],
+    [3.1, 6.2, -2.2],
+    [-2.4, 3.8, -0.8],
+    [2.6, 4.2, -0.5],
+    [-0.2, 8.4, -3.4],
+    [3.8, 8.1, -3.8],
+    [-4.2, 7.2, -4.2],
+    [1.2, 5.6, -1.4],
+    [-1.6, 6.6, -2.4],
+    [4.4, 5.4, -2.8],
+    [-3.6, 4.2, -1.1],
+    [0.4, 7.4, -2.6],
+    [2.2, 3.3, 0.4],
+    [-0.8, 4.6, -0.4],
+    [4.8, 7.0, -4.6],
+    [-4.8, 5.8, -3.2],
   ];
   glitchSpots.forEach((spot, index) => {
     const group = new THREE.Group();
@@ -844,7 +924,7 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
 
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  const bloom = new UnrealBloomPass(new THREE.Vector2(512, 512), 0.38, 0.42, 0.82);
+  const bloom = new UnrealBloomPass(new THREE.Vector2(512, 512), 0.42, 0.4, 0.78);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
 
@@ -894,7 +974,7 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
         const s = seeds[i];
         x += Math.sin(state.time * 2.1 + s * 40) * 0.012;
         y += Math.cos(state.time * 1.6 + s * 20) * 0.01;
-        const tw = 0.62 + 0.38 * Math.sin(state.time * 3.2 + s * 30);
+        const tw = 0.4 + 0.6 * Math.sin(state.time * 4.2 + s * 30);
         col.setXYZ(i, base[i * 3] * tw, base[i * 3 + 1] * tw, base[i * 3 + 2] * tw);
       }
       pos.setXYZ(i, x, y, z);
@@ -909,23 +989,29 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     points.userData.burst.fill(0);
   }
 
-  function placeDeer(t) {
-    const pos = deer.geometry.attributes.position;
+  function placeCloud(geometry, from, target, t) {
+    const pos = geometry.attributes.position;
     const spin = (1 - t) * 7.5;
     const c = Math.cos(spin);
     const s = Math.sin(spin);
-    for (let i = 0; i < deerData.count; i++) {
-      const fx = deerFrom[i * 3];
-      const fy = deerFrom[i * 3 + 1];
-      const fz = deerFrom[i * 3 + 2];
+    const n = target.length / 3;
+    for (let i = 0; i < n; i++) {
+      const fx = from[i * 3];
+      const fy = from[i * 3 + 1];
+      const fz = from[i * 3 + 2];
       const sx = fx * c - fz * s;
       const sz = fx * s + fz * c;
-      const tx = deerData.position[i * 3];
-      const ty = deerData.position[i * 3 + 1];
-      const tz = deerData.position[i * 3 + 2];
+      const tx = target[i * 3];
+      const ty = target[i * 3 + 1];
+      const tz = target[i * 3 + 2];
       pos.setXYZ(i, sx + (tx - sx) * t, fy + (ty - fy) * t, sz + (tz - sz) * t);
     }
     pos.needsUpdate = true;
+  }
+
+  function placeDeer(t) {
+    placeCloud(deer.geometry, deerFrom, deerData.position, t);
+    placeCloud(deerGold.geometry, goldFrom, deerData.gold, t);
   }
 
   function showOrnaments(count, animate) {
@@ -946,13 +1032,13 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
   function frameCamera() {
     const tall = camera.aspect < 0.72 || state.corner;
     if (tall) {
-      camera.fov = 32.5;
-      camera.position.set(0.2, 2.35, 12.1);
-      camera.lookAt(0.12, 2.95, 0);
+      camera.fov = 34;
+      camera.position.set(0.55, 2.85, 13.4);
+      camera.lookAt(-0.05, 3.35, 0);
     } else {
-      camera.fov = 33.5;
-      camera.position.set(0.06, 1.7, 8.15);
-      camera.lookAt(0.0, 2.18, 0);
+      camera.fov = 36;
+      camera.position.set(0.35, 2.05, 9.7);
+      camera.lookAt(-0.25, 2.55, 0);
     }
   }
 
@@ -981,7 +1067,9 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     star.visible = state.starReady;
     star.scale.setScalar(state.starReady ? 1 : 0.001);
     starFlash.material.opacity = 0;
-    starLight.intensity = state.starReady ? 1.4 : 0;
+    starGlow.material.opacity = state.starReady ? 0.72 : 0;
+    starGlow.scale.set(2.9, 2.9, 1);
+    starLight.intensity = state.starReady ? 2.2 : 0;
     gifts.forEach((gift) => {
       const on = step >= 5;
       gift.visible = on;
@@ -991,7 +1079,7 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     state.deerLive = step >= 6;
     state.deerT = state.deerLive ? 1 : 0;
     deerPivot.visible = state.deerLive;
-    deerPivot.scale.setScalar(1.22);
+    deerPivot.scale.setScalar(DEER_S);
     if (state.deerLive) placeDeer(1);
     state.snow = step >= 7;
     state.burst = 0;
@@ -1001,7 +1089,9 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     resetSnow(snowFat);
     state.finale = false;
     team.visible = false;
-    team.position.x = -3.4;
+    team.position.x = MOON.x - 5.2;
+    team.position.y = MOON.y + 0.2;
+    team.position.z = MOON.z + 1.15;
     rings.forEach((ring) => ring.scale.setScalar(0.001));
   }
 
@@ -1032,8 +1122,10 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
         const pop = Math.min(1, u * 1.35);
         star.scale.setScalar(Math.max(0.001, easeOutBack(pop)));
         starFlash.material.opacity = u < 0.45 ? 1 - u / 0.45 : 0;
-        starFlash.scale.setScalar(0.4 + u * 3.2);
-        starLight.intensity = 8 * (1 - u) + 1.4;
+        starFlash.scale.setScalar(0.5 + u * 4.2);
+        starGlow.material.opacity = Math.min(0.75, u * 1.1);
+        starGlow.scale.setScalar(0.4 + u * 2.6);
+        starLight.intensity = 10 * (1 - u) + 2.2;
         if (u === 1) state.starReady = true;
       }, { tag: "star" });
     } else if (type === "gifts") {
@@ -1077,8 +1169,10 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
       rings.forEach((ring) => ring.scale.setScalar(0.001));
       tween(3, (u) => {
         const e = easeInOut(u);
-        team.position.x = -3.6 + (2.35 - -3.6) * e;
-        team.position.y = MOON.y + 0.35 + Math.sin(u * Math.PI) * 0.16;
+        const startX = MOON.x - 5.4;
+        const endX = MOON.x - 0.85;
+        team.position.x = startX + (endX - startX) * e;
+        team.position.y = MOON.y + 0.2 + Math.sin(u * Math.PI) * 0.06;
         const s = Math.max(0.001, easeOutBack(Math.min(1, u * 1.15)));
         rings.forEach((ring) => ring.scale.setScalar(s));
         if (u === 1) state.finale = true;
@@ -1100,7 +1194,9 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     glow.material.opacity = 0.75 + Math.sin(state.time * 1.4) * 0.12;
     tealRing.material.opacity = 0.85 + Math.sin(state.time * 2) * 0.15;
 
+    iridescentTime.value = state.time;
     writeGlitter(dust, state.grow > 0.2);
+    writeGlitter(shell, state.grow > 0.2);
     writeGlitter(spark, state.grow > 0.2);
     const ribbonCount = ribbon.geometry.index.count;
     ribbon.geometry.setDrawRange(0, Math.floor(ribbonCount * state.grow));
@@ -1124,14 +1220,16 @@ export function createScene(canvas, { corner = false, preserveDrawingBuffer = fa
     if (state.starReady) {
       const p = 1 + Math.sin(state.time * 2.3) * 0.06;
       star.scale.setScalar(p);
-      starLight.intensity = 1.2 + Math.sin(state.time * 2.3) * 0.35;
+      starGlow.material.opacity = 0.62 + Math.sin(state.time * 2.3) * 0.12;
+      starGlow.scale.setScalar(2.75 + Math.sin(state.time * 2.3) * 0.18);
+      starLight.intensity = 1.8 + Math.sin(state.time * 2.3) * 0.5;
     }
 
     if (state.deerLive) {
       placeDeer(state.deerT);
       if (state.deerT >= 1) {
         const b = 1 + Math.sin(state.time * 1.7) * 0.035;
-        deerPivot.scale.set(1.22, 1.22 * b, 1.22);
+        deerPivot.scale.set(DEER_S, DEER_S * b, DEER_S);
       }
     }
 

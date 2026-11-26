@@ -15,6 +15,30 @@ const VISION = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.17/vis
 const MODEL =
   "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task";
 
+const PLACEHOLDER = [
+  [0.5, 0.72],
+  [0.42, 0.66],
+  [0.34, 0.58],
+  [0.28, 0.5],
+  [0.24, 0.4],
+  [0.4, 0.52],
+  [0.38, 0.4],
+  [0.37, 0.32],
+  [0.36, 0.22],
+  [0.5, 0.48],
+  [0.5, 0.36],
+  [0.5, 0.26],
+  [0.5, 0.16],
+  [0.58, 0.5],
+  [0.6, 0.38],
+  [0.61, 0.3],
+  [0.62, 0.2],
+  [0.66, 0.56],
+  [0.7, 0.46],
+  [0.72, 0.38],
+  [0.74, 0.3],
+];
+
 const CONNECTIONS = [
   [0, 1], [1, 2], [2, 3], [3, 4],
   [0, 5], [5, 6], [6, 7], [7, 8],
@@ -220,7 +244,7 @@ function frame(now) {
       drawHands(null);
     }
   } else if (demo) {
-    drawHands(null);
+    drawHands([PLACEHOLDER.map(([x, y]) => ({ x, y }))]);
   }
   if (debugOn && !record) {
     const info = gestures.debug;
