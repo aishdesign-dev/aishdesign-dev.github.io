@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Christmas Scene — Aishwarya</title>
+  <meta name="author" content="Aishwarya" />
+  <meta name="description" content="A hand-gesture Christmas scene by Aishwarya. Build a moonlit tree with your hands." />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!--
+    Christmas scene by Aishwarya.
+    Keys: 1–7 jump to a step, R resets, D toggles landmark debug.
+    ?record=1 hides the hint. ?corner=1 is a full-bleed scene with a corner camera.
+    ?demo=1 skips the camera and a click plays the current step.
+  -->
+  <h1 class="sr">Christmas scene by Aishwarya</h1>
+  <main id="stage">
+    <div id="scene-wrap">
+      <canvas id="scene-canvas"></canvas>
+    </div>
+    <div id="cam">
+      <div id="cam-fit">
+        <video id="video" playsinline autoplay muted></video>
+        <canvas id="overlay"></canvas>
+      </div>
+      <div class="scan"></div>
+      <div class="tear tear-a"></div>
+      <div class="tear tear-b"></div>
+      <div class="vignette"></div>
+    </div>
+    <p id="hint" aria-live="polite">Raise an open palm</p>
+    <pre id="debug"></pre>
+  </main>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
